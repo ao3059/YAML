@@ -1,0 +1,24 @@
+name: Bump version and tag
+
+on:
+  push:
+    branches:
+      - main  # Trigger when code is pushed to the 'main' branch
+
+jobs:
+  build:
+    name: Create Tag
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code from your repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Bump version and push tag
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.26.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          DEFAULT_BUMP: patch  # You can change this to 'minor' or 'major' if needed
