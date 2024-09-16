@@ -1,0 +1,32 @@
+name: Create GitHub Release
+
+on:
+  push:
+    tags:
+      - '*'  # Trigger when any tag is pushed
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code that triggered this workflow
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Create a release using the tag
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this token
+        with:
+          tag_name: ${{ github.ref }}  # The tag name that triggered this workflow
+          release_name: Release ${{ github.ref }}  # The name of the release
+          draft: false  # Publish the release immediately
+          prerelease: false  # This is a full release, not a pre-release
+
+      # Step 3: Output the release URL (optional but helpful)
+      - name: Display release URL
+        run: echo "Release created: ${{ steps.create_release.outputs.html_url }}"
